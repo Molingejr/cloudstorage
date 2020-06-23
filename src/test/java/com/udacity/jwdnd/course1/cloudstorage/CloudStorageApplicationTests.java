@@ -76,7 +76,7 @@ class CloudStorageApplicationTests {
 	// logs out, and verifies that the home page is no longer accessible.
 	@Test
 	@Order(3)
-	public void authorizedUser(){
+	public void authorizedUser() throws InterruptedException {
 		// Test user signup
 		driver.get("http://localhost:" + this.port + "/signup");
 		WebDriverWait wait = new WebDriverWait(driver, 2);
@@ -109,6 +109,7 @@ class CloudStorageApplicationTests {
 		// Test User logout and verity access to home page
 		WebElement logout = driver.findElement(By.xpath("//button[text()='Logout']"));
 		logout.click();
+		Thread.sleep(60);
 		Assertions.assertEquals("Login", driver.getTitle());
 		driver.get("http://localhost:" + this.port + "/home");
 		Assertions.assertEquals("Login", driver.getTitle());
@@ -127,14 +128,17 @@ class CloudStorageApplicationTests {
 		password.sendKeys("Anderson@mikel32");
 		login.click();
 
+		WebDriverWait wait = new WebDriverWait(driver, 10);
+
 		// Locate and click on 'Add a New Note' button
 		driver.get("http://localhost:" + this.port + "/home");
+		wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Notes")));
 		driver.findElement(By.linkText("Notes")).click();
 		driver.switchTo().activeElement();
+
 		WebElement addNewNote = driver.findElement(By.xpath("//button[text()= '\n" +
 				"                            + Add a New Note\n" +
 				"                        ']"));
-		WebDriverWait wait = new WebDriverWait(driver, 2);
 
 		wait.until(ExpectedConditions.elementToBeClickable(By.xpath(
 				"//div[@id='nav-notes']/button[@class='btn btn-info float-right']")));
@@ -160,6 +164,7 @@ class CloudStorageApplicationTests {
 		// Verify display of the new note
 		WebElement continueLink = driver.findElement(By.xpath("//a[text()='here']"));
 		continueLink.click();
+		wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Notes")));
 		driver.findElement(By.linkText("Notes")).click();
 		driver.switchTo().activeElement();
 		WebElement noteHeaderTitle = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@id='nav-notes']/div[@class='table-responsive']" +
@@ -187,11 +192,13 @@ class CloudStorageApplicationTests {
 		password.sendKeys("Anderson@mikel32");
 		login.click();
 
+		WebDriverWait wait = new WebDriverWait(driver, 10);
+
 		// Locate Note section
 		driver.get("http://localhost:" + this.port + "/home");
+		wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Notes")));
 		driver.findElement(By.linkText("Notes")).click();
 		driver.switchTo().activeElement();
-		WebDriverWait wait = new WebDriverWait(driver, 2);
 		WebElement editNote = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@id='nav-notes']/div[@class='table-responsive']" +
 				"/table[@id='userTable']/tbody/tr/td/button[text()='Edit']")));
 		editNote.click();
@@ -221,6 +228,7 @@ class CloudStorageApplicationTests {
 		// Verify display of the edited note
 		WebElement continueLink = driver.findElement(By.xpath("//a[text()='here']"));
 		continueLink.click();
+		wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Notes")));
 		driver.findElement(By.linkText("Notes")).click();
 		driver.switchTo().activeElement();
 		WebElement noteHeaderTitle = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@id='nav-notes']/div[@class='table-responsive']" +
@@ -247,12 +255,12 @@ class CloudStorageApplicationTests {
 		password.sendKeys("Anderson@mikel32");
 		login.click();
 
+		WebDriverWait wait = new WebDriverWait(driver, 10);
 		// Locate note section
 		driver.get("http://localhost:" + this.port + "/home");
+		wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Notes")));
 		driver.findElement(By.linkText("Notes")).click();
 		driver.switchTo().activeElement();
-
-		WebDriverWait wait = new WebDriverWait(driver, 2);
 
 		WebElement deleteNote = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@id='nav-notes']/div[@class='table-responsive']" +
 				"/table[@id='userTable']/tbody/tr/td/a[text()='Delete']")));
@@ -264,6 +272,7 @@ class CloudStorageApplicationTests {
 		// Verify that deleted note no longer display
 		WebElement continueLink = driver.findElement(By.xpath("//a[text()='here']"));
 		continueLink.click();
+		wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Notes")));
 		driver.findElement(By.linkText("Notes")).click();
 		driver.switchTo().activeElement();
 		WebElement noteHeaderTitle = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@id='nav-notes']/div[@class='table-responsive']" +
@@ -289,15 +298,18 @@ class CloudStorageApplicationTests {
 		password.sendKeys("Anderson@mikel32");
 		login.click();
 
+		WebDriverWait wait = new WebDriverWait(driver, 10);
+
 		// Locate credentials section and click add new credential
 		driver.get("http://localhost:" + this.port + "/home");
+		wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Credentials")));
 		driver.findElement(By.linkText("Credentials")).click();
 		driver.switchTo().activeElement();
 		WebElement addCredential = driver.findElement(By.xpath("//button[text()= '\n" +
 				"                            + Add a New Credential\n" +
 				"                        ']"));
 
-		WebDriverWait wait = new WebDriverWait(driver, 2);
+
 		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@id='nav-credentials']/button[@class='btn btn-info float-right']")));
 		addCredential.click();
 
@@ -325,6 +337,7 @@ class CloudStorageApplicationTests {
 		// Verify display of newly created credentials
 		WebElement continueLink = driver.findElement(By.xpath("//a[text()='here']"));
 		continueLink.click();
+		wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Credentials")));
 		driver.findElement(By.linkText("Credentials")).click();
 		driver.switchTo().activeElement();
 		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@id='nav-credentials']/button[@class='btn btn-info float-right']")));
@@ -345,12 +358,15 @@ class CloudStorageApplicationTests {
 		password.sendKeys("Anderson@mikel32");
 		login.click();
 
+		WebDriverWait wait = new WebDriverWait(driver, 10);
+
 		// Find credentials and click edit
 		driver.get("http://localhost:" + this.port + "/home");
+		wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Credentials")));
 		driver.findElement(By.linkText("Credentials")).click();
 		driver.switchTo().activeElement();
 
-		WebDriverWait wait = new WebDriverWait(driver, 2);
+
 		WebElement editCredential = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@id='nav-credentials']/div[@class='table-responsive']" +
 				"/table[@id='credentialTable']/tbody/tr/td/button[text()='Edit']")));
 		editCredential.click();
@@ -385,6 +401,7 @@ class CloudStorageApplicationTests {
 		// Verify display of edited credentials
 		WebElement continueLink = driver.findElement(By.xpath("//a[text()='here']"));
 		continueLink.click();
+		wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Credentials")));
 		driver.findElement(By.linkText("Credentials")).click();
 		driver.switchTo().activeElement();
 		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@id='nav-credentials']/button[@class='btn btn-info float-right']")));
@@ -402,12 +419,14 @@ class CloudStorageApplicationTests {
 		password.sendKeys("Anderson@mikel32");
 		login.click();
 
+		WebDriverWait wait = new WebDriverWait(driver, 10);
+
 		// Go to credential tab and delete credentials
 		driver.get("http://localhost:" + this.port + "/home");
+		wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Credentials")));
 		driver.findElement(By.linkText("Credentials")).click();
 		driver.switchTo().activeElement();
 
-		WebDriverWait wait = new WebDriverWait(driver, 2);
 		WebElement deleteCredentials = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@id='nav-credentials']/div[@class='table-responsive']" +
 				"/table[@id='credentialTable']/tbody/tr/td/a[text()='Delete']")));
 
@@ -419,6 +438,7 @@ class CloudStorageApplicationTests {
 		// Verify display of deleted credentials
 		WebElement continueLink = driver.findElement(By.xpath("//a[text()='here']"));
 		continueLink.click();
+		wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Credentials")));
 		driver.findElement(By.linkText("Credentials")).click();
 		driver.switchTo().activeElement();
 		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@id='nav-credentials']/button[@class='btn btn-info float-right']")));
